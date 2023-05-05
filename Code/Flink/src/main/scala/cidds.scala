@@ -14,19 +14,14 @@ object cidds {
 
   def main(args: Array[String]): Unit = {
     val env = ExecutionEnvironment.getExecutionEnvironment
-    //    val trainPath = "hdfs:///user/hadoop/nb/CIDD/train/tr1.csv"
-    //    val testPath = "hdfs:///user/hadoop/nb/CIDD/train/tr1.csv"
     val trainPath = "hdfs:///user/ubuntu/Hadoop/nb/CIDD/train/CIDDS_train.csv"
     val testPath = "hdfs:///user/ubuntu/Hadoop/nb/CIDD/test/CIDDS_test.csv"
 
     println("Loading data! Current time is: " + df.format(System.currentTimeMillis()))
     val trainInput = env.readCsvFile[DataFormat](trainPath) // DataSet
     val testInput = env.readCsvFile[DataFormat](testPath) // DataSet
-
-    //    val totalTrain = trainInput.count() //5912740
-    //    val totalTest = testInput.count()   //2534031
-    val totalTrain = 5912740
-    val totalTest = 2534031
+    val totalTrain = trainInput.count()
+    val totalTest = testInput.count()
 
     // Format Dataset
     println("Reformat data! Current time is: " + df.format(System.currentTimeMillis()))
@@ -50,16 +45,10 @@ object cidds {
 
     // Start Fitting
     val svm = SVM()
-      //     .setBlocks(1)
       .setBlocks(env.getParallelism)
       .setIterations(100)
       .setRegularization(0.001)
       .setStepsize(0.1)
-    //     .setRegularization(1.11)
-    //     .setStepsize(0.01)
-    //     .setOutputDecisionFunction(true)
-    //     .setThreshold(98435.6)
-    //      .setSeed(10)
 
     println("Start Training! Current time is: " + df.format(System.currentTimeMillis()))
     val trainstart = System.currentTimeMillis()
@@ -84,31 +73,6 @@ object cidds {
     val jobend = System.currentTimeMillis()
     println("Whole Job Finish! Current time is: " + df.format(System.currentTimeMillis()))
 
-
-
-    // Calculate Accuracy
-    //    println("Calculating Accuracy! Current time is: " + df.format(System.currentTimeMillis()))
-    /*      val tpI = predict.map(a => ( "fp",if(a._1.toDouble == 1.0 && a._2.toDouble == 1.0 ) 1.toInt else 0.toInt ) ).sum(1).setParallelism(30).collect()
-          val tnI = predict.map(a => ( "tn",if(a._1.toDouble == -1.0 && a._2.toDouble == -1.0) 1.toInt else 0.toInt ) ).sum(1).setParallelism(30).collect()
-          val fpI = predict.map(a => ( "fp",if(a._1.toDouble == -1.0 && a._2.toDouble == 1.0) 1.toInt else 0.toInt) ).sum(1).setParallelism(30).collect()
-          val fnI = predict.map(a => ( "fn",if(a._1.toDouble == 1.0 && a._2.toDouble == -1.0) 1.toInt else 0.toInt) ).sum(1).setParallelism(30).collect()
-
-          val tp = tpI.head._2
-          val tn = tnI.head._2
-          val fp = fpI.head._2
-          val fn = fnI.head._2
-
-          println("new")
-    */
-    /*
-  val tp = predict.filter { e => e._1.toDouble == 1.0 && e._2.toDouble == 1.0}.count
-  val tn = predict.filter { e => e._1.toDouble == -1.0 && e._2.toDouble == -1.0}.count
-  val fp = predict.filter { e => e._1.toDouble == -1.0 && e._2.toDouble == 1.0}.count
-  val fn = predict.filter { e => e._1.toDouble == 1.0 && e._2.toDouble == -1.0}.count
-*/
-    //    val precision  = (tp.toDouble/(tp.toDouble + fp.toDouble)).formatted("%.6f").toDouble
-    //    val recall = (tp.toDouble/(tp.toDouble + fn.toDouble)).formatted("%.6f").toDouble
-
     // Print Output
     println("Job Finished! Current time is: " + df.format(System.currentTimeMillis()))
     println("************** Output ************************")
@@ -117,14 +81,6 @@ object cidds {
     println(s"Training Time = ${trainend-trainstart} ms")
     println(s"Prediction Time = ${predend-predstart} ms" )
     println(s"Total Time = ${jobend-jobstart} ms" )
-    /*    println("Accuracy = " + (tp.toDouble + tn.toDouble)/totalTest.toDouble)
-        println("tp = " + tp.toInt )
-        println("tn = " + tn.toInt )
-        println("fp = " + fp.toInt )
-        println("fn = " + fn.toInt )
-        println("Detect Rate = " + precision)
-        println("Recall = " + recall)
-        println("F1 = " + 2.0/ ((1.0/precision)+(1.0/recall)))*/
     println("***********************************************")
 
   }
