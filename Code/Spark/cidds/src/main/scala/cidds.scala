@@ -15,9 +15,6 @@ object SVM {
 val df = new SimpleDateFormat("yyyy-dd-MM HH:mm:ss:SSSS")
 
      def main(args: Array[String]): Unit = {
-    //val conf = new SparkConf().setAppName("SVMWithSGDExample").setMaster("local")
-    //val conf = new SparkConf().setAppName("TestSVM").setMaster("local")
-    //val conf = new SparkConf().setAppName("TestSVM").setMaster("local")
     val conf = new SparkConf().setAppName("cidds")
     val sc = new SparkContext(conf)
 
@@ -25,8 +22,6 @@ println("Job Start! Current Time is: " + df.format(System.currentTimeMillis()))
     val jobstarttime = System.currentTimeMillis()
     
     println("------------------------Read File-------------------------")
-    //val traindata = sc.textFile("/home/hadoop/Desktop/svm/20KDDTrain.txt")   
-    //val testdata = sc.textFile("/home/hadoop/Desktop/svm/20KDDTest.txt")
     val traindata = sc.textFile("/user/ubuntu/Hadoop/nb/CIDD/train/CIDDS_train.csv")   
     val testdata = sc.textFile("/user/ubuntu/Hadoop/nb/CIDD/test/CIDDS_test.csv")
 
@@ -35,13 +30,10 @@ println("Transform Data! Current Time is: " + df.format(System.currentTimeMillis
     println("-------------------Read file Complete -> Set LabelPoint----------------------")
     val training = traindata.map { line =>
       val parts = line.split(',')
-      //val parts2 = line.split(',').filter(_)
         LabeledPoint(
             if (parts(11)=="normal") 0.toDouble
             else 1.toDouble,
-// parts(47).toDouble,
 Vectors.dense(parts(0).toDouble,parts(1).toDouble,parts(2).toDouble,parts(3).toDouble,parts(4).toDouble,parts(5).toDouble,parts(6).toDouble,parts(7).toDouble,parts(8).toDouble,parts(9).toDouble,parts(10).toDouble)
-            //Vectors.dense(parts.map(_.toDouble))
         )
        }.cache()
 
@@ -70,7 +62,6 @@ Vectors.dense(parts(0).toDouble,parts(1).toDouble,parts(2).toDouble,parts(3).toD
         LabeledPoint(
             if (parts(11)=="normal") 0.toDouble
             else 1.toDouble,
-// parts(47).toDouble,
 Vectors.dense(parts(0).toDouble,parts(1).toDouble,parts(2).toDouble,parts(3).toDouble,parts(4).toDouble,parts(5).toDouble,parts(6).toDouble,parts(7).toDouble,parts(8).toDouble,parts(9).toDouble,parts(10).toDouble)
         )
        }
@@ -139,7 +130,6 @@ println("Prediction End! Current Time is: " + df.format(System.currentTimeMillis
     val R = tp.toDouble/(tp+fn).toDouble // recall rate
     val f1 = 2.toDouble/(1.toDouble/precision.toDouble + 1.toDouble/R.toDouble).toDouble
     val dr = tp.toDouble / (tp+fp).toDouble
-    //scoreAndLabels.foreach(println)
 
 
     println("Job End! Current Time is: " + df.format(System.currentTimeMillis()))
