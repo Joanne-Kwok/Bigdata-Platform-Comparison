@@ -25,8 +25,6 @@ println("Job Start! Current Time is: " + df.format(System.currentTimeMillis()))
     val jobstarttime = System.currentTimeMillis()
     
     println("------------------------Read File-------------------------")
-    //val traindata = sc.textFile("/home/hadoop/Desktop/svm/20KDDTrain.txt")   
-    //val testdata = sc.textFile("/home/hadoop/Desktop/svm/20KDDTest.txt")
     val traindata = sc.textFile("/user/ubuntu/Hadoop/nb/cicids2017/train/CICIDS2017_train.csv")   
     val testdata = sc.textFile("/user/ubuntu/Hadoop/nb/cicids2017/test/CICIDS2017_test.csv")
 
@@ -35,13 +33,10 @@ println("Transform Data! Current Time is: " + df.format(System.currentTimeMillis
     println("-------------------Read file Complete -> Set LabelPoint----------------------")
     val training = traindata.map { line =>
       val parts = line.split(',')
-      //val parts2 = line.split(',').filter(_)
         LabeledPoint(
             if (parts(82)=="BENIGN") 0.toDouble
             else 1.toDouble,
-// parts(47).toDouble,
 Vectors.dense(parts(0).toDouble,parts(1).toDouble,parts(2).toDouble,parts(3).toDouble,parts(4).toDouble,parts(5).toDouble,parts(6).toDouble,parts(7).toDouble,parts(8).toDouble,parts(9).toDouble,parts(10).toDouble,parts(11).toDouble,parts(12).toDouble,parts(13).toDouble,parts(14).toDouble,parts(15).toDouble,parts(16).toDouble,parts(17).toDouble,parts(18).toDouble,parts(19).toDouble,parts(20).toDouble,parts(21).toDouble,parts(22).toDouble,parts(23).toDouble,parts(24).toDouble,parts(25).toDouble,parts(26).toDouble,parts(27).toDouble,parts(28).toDouble,parts(29).toDouble,parts(30).toDouble,parts(31).toDouble,parts(32).toDouble,parts(33).toDouble,parts(34).toDouble,parts(35).toDouble,parts(36).toDouble,parts(37).toDouble,parts(38).toDouble,parts(39).toDouble,parts(40).toDouble,parts(41).toDouble,parts(42).toDouble,parts(43).toDouble,parts(44).toDouble,parts(45).toDouble,parts(46).toDouble,parts(47).toDouble,parts(48).toDouble,parts(49).toDouble,parts(50).toDouble,parts(51).toDouble,parts(52).toDouble,parts(53).toDouble,parts(54).toDouble,parts(55).toDouble,parts(56).toDouble,parts(57).toDouble,parts(58).toDouble,parts(59).toDouble,parts(60).toDouble,parts(61).toDouble,parts(62).toDouble,parts(63).toDouble,parts(64).toDouble,parts(65).toDouble,parts(66).toDouble,parts(67).toDouble,parts(68).toDouble,parts(69).toDouble,parts(70).toDouble,parts(71).toDouble,parts(72).toDouble,parts(73).toDouble,parts(74).toDouble,parts(75).toDouble,parts(76).toDouble,parts(77).toDouble,parts(78).toDouble,parts(79).toDouble,parts(80).toDouble,parts(81).toDouble)
-            //Vectors.dense(parts.map(_.toDouble))
         )
        }.cache()
 
@@ -70,7 +65,6 @@ Vectors.dense(parts(0).toDouble,parts(1).toDouble,parts(2).toDouble,parts(3).toD
         LabeledPoint(
             if (parts(82)=="BENIGN") 0.toDouble
             else 1.toDouble,
-// parts(47).toDouble,
 Vectors.dense(parts(0).toDouble,parts(1).toDouble,parts(2).toDouble,parts(3).toDouble,parts(4).toDouble,parts(5).toDouble,parts(6).toDouble,parts(7).toDouble,parts(8).toDouble,parts(9).toDouble,parts(10).toDouble,parts(11).toDouble,parts(12).toDouble,parts(13).toDouble,parts(14).toDouble,parts(15).toDouble,parts(16).toDouble,parts(17).toDouble,parts(18).toDouble,parts(19).toDouble,parts(20).toDouble,parts(21).toDouble,parts(22).toDouble,parts(23).toDouble,parts(24).toDouble,parts(25).toDouble,parts(26).toDouble,parts(27).toDouble,parts(28).toDouble,parts(29).toDouble,parts(30).toDouble,parts(31).toDouble,parts(32).toDouble,parts(33).toDouble,parts(34).toDouble,parts(35).toDouble,parts(36).toDouble,parts(37).toDouble,parts(38).toDouble,parts(39).toDouble,parts(40).toDouble,parts(41).toDouble,parts(42).toDouble,parts(43).toDouble,parts(44).toDouble,parts(45).toDouble,parts(46).toDouble,parts(47).toDouble,parts(48).toDouble,parts(49).toDouble,parts(50).toDouble,parts(51).toDouble,parts(52).toDouble,parts(53).toDouble,parts(54).toDouble,parts(55).toDouble,parts(56).toDouble,parts(57).toDouble,parts(58).toDouble,parts(59).toDouble,parts(60).toDouble,parts(61).toDouble,parts(62).toDouble,parts(63).toDouble,parts(64).toDouble,parts(65).toDouble,parts(66).toDouble,parts(67).toDouble,parts(68).toDouble,parts(69).toDouble,parts(70).toDouble,parts(71).toDouble,parts(72).toDouble,parts(73).toDouble,parts(74).toDouble,parts(75).toDouble,parts(76).toDouble,parts(77).toDouble,parts(78).toDouble,parts(79).toDouble,parts(80).toDouble,parts(81).toDouble)
         )
        }
@@ -139,7 +133,6 @@ println("Prediction End! Current Time is: " + df.format(System.currentTimeMillis
     val R = tp.toDouble/(tp+fn).toDouble // recall rate
     val f1 = 2.toDouble/(1.toDouble/precision.toDouble + 1.toDouble/R.toDouble).toDouble
     val dr = tp.toDouble / (tp+fp).toDouble
-    //scoreAndLabels.foreach(println)
 
 
     println("Job End! Current Time is: " + df.format(System.currentTimeMillis()))
@@ -171,10 +164,10 @@ println("Prediction End! Current Time is: " + df.format(System.currentTimeMillis
 
     // Get evaluation metrics.
     val metrics = new BinaryClassificationMetrics(scoreAndLabels)
-    //val metrics = new MulticlassMetrics(scoreAndLabels)
     val auROC = metrics.areaUnderROC()
 
     println("Area under ROC = " + auROC)
+          
     
   }
 }
