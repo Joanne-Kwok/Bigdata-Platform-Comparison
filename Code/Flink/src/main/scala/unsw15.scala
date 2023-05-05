@@ -82,14 +82,6 @@ object unsw15 {
     println(s"Training Time = ${trainend-trainstart} ms")
     println(s"Prediction Time = ${predend-predstart} ms" )
     println(s"Total Time = ${jobend-jobstart} ms" )
-    println("Accuracy = " + (tp.toDouble + tn.toDouble)/totalTest.toDouble)
-    println("tp = " + tp.toInt )
-    println("tn = " + tn.toInt )
-    println("fp = " + fp.toInt )
-    println("fn = " + fn.toInt )
-    println("Detect Rate = " + precision)
-    println("Recall = " + recall)
-    println("F1 = " + 2.0/ ((1.0/precision)+(1.0/recall)))
     println("***********************************************")
 
   }
