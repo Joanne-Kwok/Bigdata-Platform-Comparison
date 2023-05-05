@@ -20,12 +20,8 @@ object ddos2019 {
     println("Loading data! Current time is: " + df.format(System.currentTimeMillis()))
     val trainInput = env.readCsvFile[DataFormat](trainPath) // DataSet
     val testInput = env.readCsvFile[DataFormat](testPath) // DataSet
-
-    //    val totalTrain = trainInput.count()
-    //    val totalTest = testInput.count()
-
-    val totalTrain = 1479255
-    val totalTest = 633966
+    val totalTrain = trainInput.count()
+    val totalTest = testInput.count()
 
     // Format Dataset
     println("Reformat data! Current time is: " + df.format(System.currentTimeMillis()))
@@ -49,16 +45,10 @@ object ddos2019 {
 
     // Start Fitting
     val svm = SVM()
-      //     .setBlocks(1)
       .setBlocks(env.getParallelism)
       .setIterations(100)
       .setRegularization(0.001)
       .setStepsize(0.1)
-    //     .setRegularization(1.11)
-    //     .setStepsize(0.01)
-    //     .setOutputDecisionFunction(true)
-    // .setThreshold(98435.6)
-    //      .setSeed(10)
 
     println("Start Training! Current time is: " + df.format(System.currentTimeMillis()))
     val trainstart = System.currentTimeMillis()
@@ -76,24 +66,13 @@ object ddos2019 {
     val predend = System.currentTimeMillis()
     println("End Prediction! Current time is: " + df.format(System.currentTimeMillis()))
 
-    //    predict.print()
-
     // Calculate Accuracy
-    //    println("Calculating Accuracy! Current time is: " + df.format(System.currentTimeMillis()))
     println("Whole Job Execute! Current time is: " + df.format(System.currentTimeMillis()))
     val jobstart = System.currentTimeMillis()
     predict.map(t => (t._1, t._2, 1)).groupBy(0,1).reduce((x1,x2) => (x1._1, x1._2, x1._3 + x2._3)).print()
     val jobend = System.currentTimeMillis()
     println("Whole Job Finish! Current time is: " + df.format(System.currentTimeMillis()))
-    /*
-        val tp = predict.filter { e => e._1.toDouble == 1.0 && e._2.toDouble == 1.0}.count
-        val tn = predict.filter { e => e._1.toDouble == -1.0 && e._2.toDouble == -1.0}.count
-        val fp = predict.filter { e => e._1.toDouble == -1.0 && e._2.toDouble == 1.0}.count
-        val fn = predict.filter { e => e._1.toDouble == 1.0 && e._2.toDouble == -1.0}.count
 
-        val precision  = (tp.toDouble/(tp.toDouble + fp.toDouble)).formatted("%.6f").toDouble
-        val recall = (tp.toDouble/(tp.toDouble + fn.toDouble)).formatted("%.6f").toDouble
-    */
     // Print Output
     println("Job Finished! Current time is: " + df.format(System.currentTimeMillis()))
     println("************** Output ************************")
@@ -102,14 +81,6 @@ object ddos2019 {
     println(s"Training Time = ${trainend-trainstart} ms")
     println(s"Prediction Time = ${predend-predstart} ms" )
     println(s"Total Time = ${jobend-jobstart} ms" )
-    /*    println("Accuracy = " + (tp.toDouble + tn.toDouble)/totalTest.toDouble)
-        println("tp = " + tp.toInt )
-        println("tn = " + tn.toInt )
-        println("fp = " + fp.toInt )
-        println("fn = " + fn.toInt )
-        println("Detect Rate = " + precision)
-        println("Recall = " + recall)
-        println("F1 = " + 2.0/ ((1.0/precision)+(1.0/recall)))*/
     println("***********************************************")
 
   }
